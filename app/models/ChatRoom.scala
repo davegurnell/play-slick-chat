@@ -1,11 +1,20 @@
 package models
 
+import scala.slick.driver.H2Driver.simple._
+
 object ChatRoom {
-  var _messages = Seq.empty[Message]
+  def createTables =
+    database.withSession { implicit session =>
+      Messages.ddl.create
+    }
 
   def post(text: String): Unit =
-    _messages = _messages :+ Message(text)
+    database.withSession { implicit session =>
+      Messages += Message(text)
+    }
 
   def messages: List[Message] =
-    _messages.toList
+    database.withSession { implicit session =>
+      Messages.list
+    }
 }

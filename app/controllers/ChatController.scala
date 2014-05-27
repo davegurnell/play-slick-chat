@@ -7,6 +7,8 @@ import play.api.mvc._
 import models._
 
 object ChatController extends Controller {
+  implicit val format = Json.format[Message]
+
   def search = Action { request =>
     Ok(Json.toJson(ChatRoom.messages))
   }

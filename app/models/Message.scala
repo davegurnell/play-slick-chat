@@ -1,10 +1,18 @@
 package models
 
-import play.api.libs.json._
 import java.util.Date
+import scala.slick.driver.H2Driver.simple._
+import play.api.libs.json._
 
-case class Message(text: String, createdAt: Date = new Date())
+case class Message(text: String, createdAt: Long = System.currentTimeMillis)
 
-object Message {
-  implicit val format = Json.format[Message]
+class Messages(tag: Tag) extends Table[Message](tag, "messages") {
+  def text      = column[String]("text")
+  def createdAt = column[Long]("createdat")
+
+  def * = (text, createdAt) <> (Message.tupled, Message.unapply)
+}
+
+object Messages extends TableQuery(new Messages(_)) {
+
 }

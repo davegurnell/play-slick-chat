@@ -10,6 +10,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) = {
     Logger.info("Application has started")
     Logger.info("Configuration file: " + Play.current.configuration.getString("conf.filename").getOrElse("<none>"))
+    models.ChatRoom.createTables
   }
 
   override def onStop(app: Application) =
