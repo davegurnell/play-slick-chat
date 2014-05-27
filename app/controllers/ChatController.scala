@@ -14,8 +14,6 @@ object ChatController extends Controller {
   def create = Action { request =>
     val json = request.body.asJson.getOrElse(JsNull)
 
-    println("HI " + request.body.asJson)
-
     (json \ "text").validate[String].fold(
       invalid = { errors =>
         BadRequest(errors.toString)
