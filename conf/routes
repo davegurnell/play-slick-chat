@@ -1,0 +1,2 @@
+GET  /chat controllers.ChatController.search()
+POST /chat controllers.ChatController.create()
