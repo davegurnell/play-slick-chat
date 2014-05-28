@@ -13,6 +13,6 @@ class Messages(tag: Tag) extends Table[Message](tag, "messages") {
   def * = (text, createdAt) <> (Message.tupled, Message.unapply)
 }
 
-object Messages extends TableQuery(new Messages(_)) {
-
+object Messages {
+  val all = TableQuery[Messages]
 }

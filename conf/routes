@@ -1,2 +1,3 @@
-GET  /chat controllers.ChatController.search()
-POST /chat controllers.ChatController.create()
+GET  /login controllers.ChatController.login(name: String)
+GET  /chat  controllers.ChatController.search()
+POST /chat  controllers.ChatController.create()
