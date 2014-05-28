@@ -6,7 +6,7 @@ import play.api.mvc._
 
 import models._
 
-object ChatController extends Controller {
+object ChatController extends Controller with AuthHelpers {
   implicit val messageFormat   = Json.format[Message]
   implicit val authTokenFormat = Json.format[AuthToken]
 
@@ -17,26 +17,24 @@ object ChatController extends Controller {
     (__ \ "text").read[String]
 
   def login(name: String) = Action { request =>
-    val token = ChatRoom.login(name)
-    Ok(Json.toJson(token)).withHeaders(
-      "Authorization" -> s"Bearer ${token.id}"
-    )
+    val token = AuthService.login(name)
+    Ok(Json.toJson(token)).withAuthToken(token)
   }
 
   def search = Action { request =>
-    Ok(Json.toJson(ChatRoom.messages))
+    Ok(Json.toJson(ChatService.messages))
   }
 
-  def create = Action { request =>
+  def create = AuthAction { (request, token) =>
     val json = request.body.asJson.getOrElse(JsNull)
 
-    Json.fromJson[CreateRoomRequest](json).fold(
+    Json.fromJson(json)(messageTextReads).fold(
       invalid = { errors =>
         BadRequest(errors.toString)
       },
-      valid = { req =>
-        ChatRoom.post(text)
-        Ok(Json.toJson(ChatRoom.messages))
+      valid = { text =>
+        ChatService.post(text)
+        Ok(Json.toJson(ChatService.messages))
       }
     )
   }

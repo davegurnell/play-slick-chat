@@ -10,12 +10,12 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) = {
     Logger.info("Application has started")
     Logger.info("Configuration file: " + Play.current.configuration.getString("conf.filename").getOrElse("<none>"))
-    models.ChatRoom.createTables
+    models.ChatService.createTables
   }
 
   override def onStop(app: Application) = {
     Logger.info("Application shutdown...")
-    models.ChatRoom.dropTables
+    models.ChatService.dropTables
   }
 
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {

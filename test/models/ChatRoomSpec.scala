@@ -2,19 +2,19 @@ package models
 
 import org.specs2.mutable._
 
-class ChatRoomSpec extends Specification {
-  "ChatRoom.createTables" should {
+class ChatServiceSpec extends Specification {
+  "ChatService.createTables" should {
     "create a blank database" in dbExample {
-      ChatRoom.messages mustEqual Nil
+      ChatService.messages mustEqual Nil
     }
   }
 
-  "ChatRoom.post" should {
+  "ChatService.post" should {
     "add messages to the database" in dbExample {
-      ChatRoom.post("Hi!")
-      ChatRoom.post("Hi there!")
+      ChatService.post("Hi!")
+      ChatService.post("Hi there!")
 
-      val messages = ChatRoom.messages
+      val messages = ChatService.messages
 
       messages.map(_.text) mustEqual List("Hi!", "Hi there!")
       messages.map(_.createdAt) mustEqual messages.map(_.createdAt).sorted
@@ -23,10 +23,10 @@ class ChatRoomSpec extends Specification {
 
   def dbExample[A](fn: => A) = {
     try {
-      ChatRoom.createTables
+      ChatService.createTables
       fn
     } finally {
-      ChatRoom.dropTables
+      ChatService.dropTables
     }
   }
 }
